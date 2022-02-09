@@ -10,6 +10,7 @@ parser = OptionParser.new do |parser|
   parser.on('-w', '--working TASK', 'Sinalizes that you resumed working on an existing task')
   parser.on('-p', '--pause TASK', 'Sinalizes that you paused the work on an existing task and logs the time since the last "--working" punch')
   parser.on('-t', '--total TASK', 'Shows the total time spent on an existing task')
+  parser.on('-l', '--list', 'Lists all your saved tasks')
   parser.on('-d', '--delete TASK', 'Deletes an existing task')
 
   parser.on('-h', '--help', 'Prints this help') do
@@ -43,6 +44,15 @@ when :total
   total_time = DataBase.get_total_time_spent command[1]
   # Converts the float number into a more readable format 00h 00m
   puts total_time.class == String ? total_time : Time.at(total_time).utc.strftime('%Hh %Mm')
+when :list
+  tasks = DataBase.list
+  unless tasks.empty?
+    tasks.each do |task|
+      puts "#{task[0]} \t| #{Time.at(task[1]).utc.strftime('%Hh %Mm')}"
+    end
+  else
+    puts 'No task found'
+  end
 when :delete
   puts DataBase.delete_task command[1]
 else

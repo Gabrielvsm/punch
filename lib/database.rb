@@ -78,6 +78,12 @@ module DataBase
       execute_query(query)
     end
 
+    def list
+      query = 'SELECT task_name, time_spent FROM tasks'
+
+      execute_query(query)
+    end
+
     private
 
     def get_time_spent(name)
