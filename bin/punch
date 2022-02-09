@@ -25,17 +25,24 @@ if options.empty?
   exit
 end
 
+#  The 'working' flag prevents the user from starting to work on a task that wasn't paused
+# and pausing the work on a task that is already on pause
+def check_working(task)
+  DataBase.working? task
+end
+
 command = options.first
 case command[0]
 when :start
   puts DataBase.add_task command[1], Time.now.to_f
 when :pause
-  puts DataBase.paused_working command[1], Time.now.to_f
+  puts check_working(command[1]) ? DataBase.paused_working(command[1], Time.now.to_f) : 'Already on pause'
 when :working
-  puts DataBase.resumed_working command[1], Time.now.to_f
+  puts check_working(command[1]) ? "Already working on #{command[1]}" : DataBase.resumed_working(command[1], Time.now.to_f)
 when :total
   total_time = DataBase.get_total_time_spent command[1]
-  puts Time.at(total_time).utc.strftime('%Hh %Mm')
+  # Converts the float number into a more readable format 00h 00m
+  puts total_time.class == String ? total_time : Time.at(total_time).utc.strftime('%Hh %Mm')
 when :delete
   puts DataBase.delete_task command[1]
 else

@@ -6,8 +6,8 @@ module DataBase
       return 'Task already exists' if exists?(name)
 
       query = <<~SQL
-        INSERT INTO tasks (task_name, time_spent, last_punch)
-        VALUES ("#{name}", 0.0, #{last_punch});
+        INSERT INTO tasks (task_name, time_spent, last_punch, working)
+        VALUES ("#{name}", 0.0, #{last_punch}, true);
       SQL
 
       execute_query(query)
@@ -20,8 +20,9 @@ module DataBase
 
       query = <<~SQL
         UPDATE tasks
-        SET last_punch=#{punch}
-        WHERE task_name="#{name}"
+        SET last_punch=#{punch},
+            working=true
+        WHERE task_name="#{name}";
       SQL
 
       execute_query(query)
@@ -37,11 +38,23 @@ module DataBase
       query = <<~SQL
         UPDATE tasks
         SET last_punch=#{punch},
-            time_spent=#{time_spent}
-        WHERE task_name="#{name}"
+            time_spent=#{time_spent},
+            working=false
+        WHERE task_name="#{name}";
       SQL
 
       execute_query(query)
+    end
+
+    def working?(name)
+      return 'Task not found' unless exists?(name)
+
+      query = <<~SQL
+        SELECT working FROM tasks
+        WHERE task_name="#{name}";
+      SQL
+
+      execute_query(query)[0][0] == 1
     end
 
     def get_total_time_spent(name)
@@ -49,7 +62,7 @@ module DataBase
 
       query = <<~SQL
         SELECT time_spent FROM tasks
-        WHERE task_name="#{name}"
+        WHERE task_name="#{name}";
       SQL
       execute_query(query)[0][0]
     end
@@ -62,7 +75,7 @@ module DataBase
         WHERE task_name="#{name}";
       SQL
 
-      execute_query(query)[0][0]
+      execute_query(query)
     end
 
     private
