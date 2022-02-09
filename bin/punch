@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+options = {}
+
+parser = OptionParser.new do |parser|
+  parser.on('-s', '--start TASK', 'Starts a new task and logs the time that it begun')
+  parser.on('-w', '--working TASK', 'Sinalizes that you started/resumed working on an existing task')
+  parser.on('-p', '--pause TASK', 'Sinalizes that you paused the work on an existing task and logs the time since the last "--working" punch')
+  parser.on('-t', '--total TASK', 'Shows the total time spent on an existing task')
+
+  parser.on('-h', '--help', 'Prints this help') do
+    puts parser
+    exit
+  end
+end
+
+parser.parse!(into: options)
+
+if options.empty?
+  puts 'You have to give me something!!!'
+  exit
+end
