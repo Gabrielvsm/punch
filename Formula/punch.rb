@@ -1,11 +1,10 @@
 class Punch < Formula
   desc 'A digital, CLI punchcard app to control the time spent on your tasks'
   homepage 'https://github.com/Gabrielvsm/punch'
+  url 'https://github.com/Gabrielvsm/punch/archive/main.zip'
   version '0.1'
 
-  url 'https://github.com/Gabrielvsm/punch/archive/main.zip', using: :curl
-
   def install
-    bin.install 'bin/punch'
+    system "./configure", *std_configure_args, "--disable-silent-rules"
   end
 end
