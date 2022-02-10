@@ -1,5 +1,4 @@
 require 'sqlite3'
-require_relative '../env'
 
 module DataBase
   class << self
@@ -109,10 +108,11 @@ module DataBase
     #  All operations on the database are done here to handle exception and centralize
     # access in one place
     def execute_query(query)
+      db_path = "#{Dir.pwd}/share/database.db"
       result = []
 
       begin
-        db = SQLite3::Database.open Env::DB_PATH
+        db = SQLite3::Database.open db_path
         result = db.execute(query)
       rescue SQLite3::Exception => e
         puts e
