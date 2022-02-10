@@ -108,7 +108,7 @@ module DataBase
     #  All operations on the database are done here to handle exception and centralize
     # access in one place
     def execute_query(query)
-      db_path = "#{Dir.pwd}/share/database.db"
+      db_path = "#{File.expand_path('..', File.dirname(__FILE__))}/share/database.db"
       result = []
 
       begin
