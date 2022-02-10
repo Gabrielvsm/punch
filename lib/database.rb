@@ -111,7 +111,7 @@ module DataBase
       result = []
 
       begin
-        db = SQLite3::Database.open 'db/database.db'
+        db = SQLite3::Database.open 'share/database.db'
         result = db.execute(query)
       rescue SQLite3::Exception => e
         puts e
