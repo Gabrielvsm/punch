@@ -1,4 +1,5 @@
 require 'sqlite3'
+require_relative '../env'
 
 module DataBase
   class << self
@@ -111,7 +112,7 @@ module DataBase
       result = []
 
       begin
-        db = SQLite3::Database.open 'share/database.db'
+        db = SQLite3::Database.open Env::DB_PATH
         result = db.execute(query)
       rescue SQLite3::Exception => e
         puts e
